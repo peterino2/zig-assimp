@@ -41,7 +41,7 @@ const UpperCaseFormatter = std.fmt.Formatter(struct {
         var tmp: [256]u8 = undefined;
         var i: usize = 0;
         while (i < string.len) : (i += tmp.len) {
-            try writer.writeAll(std.ascii.upperString(&tmp, string[i..std.math.min(string.len, i + tmp.len)]));
+            try writer.writeAll(std.ascii.upperString(&tmp, string[i..@min(string.len, i + tmp.len)]));
         }
     }
 }.format);
