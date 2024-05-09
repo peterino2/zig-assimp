@@ -8,7 +8,7 @@ const std = @import("std");
 // Import the SDK
 const Assimp = @import("Sdk.zig");
 
-pub fn build(b: *std.build.Builder) void {
+pub fn build(b: *std.Build) void {
     const mode = b.standardReleaseOptions();
 
     const exe = b.addExecutable("static-example", null);

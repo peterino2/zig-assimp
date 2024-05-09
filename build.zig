@@ -2,7 +2,7 @@ const std = @import("std");
 
 const Assimp = @import("Sdk.zig");
 
-pub fn build(b: *std.build.Builder) void {
+pub fn build(b: *std.Build) void {
     const mode = b.standardReleaseOptions();
 
     var sdk = Assimp.init(b);

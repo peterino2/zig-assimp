@@ -18,9 +18,9 @@ fn assimpPath(comptime suffix: []const u8) []const u8 {
     };
 }
 
-builder: *std.build.Builder,
+builder: *std.Build,
 
-pub fn init(b: *std.build.Builder) *Sdk {
+pub fn init(b: *std.Build) *Sdk {
     const sdk = b.allocator.create(Sdk) catch @panic("out of memory");
     sdk.* = Sdk{
         .builder = b,
@@ -56,7 +56,7 @@ const define_name_patches = struct {
 };
 
 /// Creates a new LibExeObjStep that will build Assimp. `linkage`
-pub fn createLibrary(sdk: *Sdk, linkage: std.build.LibExeObjStep.Linkage, formats: FormatSet) *std.build.LibExeObjStep {
+pub fn createLibrary(sdk: *Sdk, linkage: std.Build.Step.Linkage, formats: FormatSet) *std.Build.Step {
     const lib = switch (linkage) {
         .static => sdk.builder.addStaticLibrary("assimp", null),
         .dynamic => sdk.builder.addSharedLibrary("assimp", null, .unversioned),
@@ -103,7 +103,7 @@ pub fn createLibrary(sdk: *Sdk, linkage: std.build.LibExeObjStep.Linkage, format
     return lib;
 }
 
-fn addSources(lib: *std.build.LibExeObjStep, file_list: []const []const u8) void {
+fn addSources(lib: *std.Build.Step, file_list: []const []const u8) void {
     const flags = [_][]const u8{};
 
     for (file_list) |src| {
@@ -130,7 +130,7 @@ pub fn getIncludePaths(sdk: *Sdk) []const []const u8 {
 
 /// Adds Assimp to the given `target`, using both `build_mode` and `target` from it.
 /// Will link dynamically or statically depending on linkage.
-pub fn addTo(sdk: *Sdk, target: *std.build.LibExeObjStep, linkage: std.build.LibExeObjStep.Linkage, formats: FormatSet) void {
+pub fn addTo(sdk: *Sdk, target: *std.Build.Step, linkage: std.Build.Step.Linkage, formats: FormatSet) void {
     const lib = sdk.createLibrary(linkage, formats);
     lib.setTarget(target.target);
     lib.setBuildMode(target.build_mode);
